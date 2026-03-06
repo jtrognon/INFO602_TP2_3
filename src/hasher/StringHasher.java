@@ -1,4 +1,4 @@
-package usmb.info602.tpblockchain.startfiles;
+package hasher;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

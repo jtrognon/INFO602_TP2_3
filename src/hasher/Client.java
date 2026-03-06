@@ -1,4 +1,4 @@
-package usmb.info602.tpblockchain.startfiles;
+package hasher;
 
 import java.io.BufferedReader;
 import java.io.IOException;
