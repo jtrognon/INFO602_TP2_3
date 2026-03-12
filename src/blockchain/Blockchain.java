@@ -45,4 +45,25 @@ public class Blockchain {
 			block.save(path);
 		}
 	}
+	
+	public void load() {
+		File directory = new File("./blockchain_" + this.id);
+		File[] files = directory.listFiles();
+		
+		if (files != null && files.length > 0) {
+			CandidateBlock cb = new CandidateBlock(null);
+			cb.loadFromFile(files[0]);
+			
+			Block prevB = cb.createCorrespondingBlock();
+			this.blocks.add(prevB);
+			
+			for (int i=1; i < files.length; i++) {
+				cb = new CandidateBlock(prevB);
+				cb.loadFromFile(files[i]);
+				
+				prevB = cb.createCorrespondingBlock();
+				this.blocks.add(prevB);
+			}
+		}
+	}
 }

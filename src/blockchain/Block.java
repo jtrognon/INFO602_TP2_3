@@ -10,27 +10,37 @@ public class Block {
 	private int index;
 	private long date;
 
-	private StringHasher hasher;
 	private String prevHash;
 	private String hash;
 	
 	private String data;
 	
-	public Block(int index, String prevHash, String data) {
+	public Block(int index, String prevHash, String hash, String data) {
 		this.index = index;
 		this.prevHash = prevHash;
+		this.hash = hash;
 		this.data = data;
 		
 		// get creation time
 		this.date = System.currentTimeMillis();
 		
-		// compute hash value
-		this.hasher = new StringHasher();
-		this.hash = this.hasher.calculateHash(this.index + this.prevHash + this.data);
+	}
+	
+	public Block(int index, String prevHash, String data) {
+		this(
+				index, 
+				prevHash, 
+				new StringHasher().calculateHash(index + prevHash + data), // compute hash value 
+				data
+			);
 	}
 	
 	public String getHash() {
 		return this.hash;
+	}
+	
+	public int getIndex() {
+		return this.index;
 	}
 	
 	@Override
