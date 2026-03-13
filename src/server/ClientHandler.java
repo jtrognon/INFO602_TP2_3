@@ -1,38 +1,18 @@
-package hasher;
+package server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server extends Thread {
-    private int port;
-
-    public Server(int port) {
-        this.port = port;
-    }
-
-    public void run() {
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
-            System.out.println("Serveur lancé sur le port " + port);
-
-            while (true) {
-                Socket socket = serverSocket.accept();
-                new ClientHandler(socket).start();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-class ClientHandler extends Thread {
+public class ClientHandler extends Thread {
     private Socket socket;
+    private String json;
 
-    public ClientHandler(Socket socket) {
+    public ClientHandler(Socket socket, String json) {
         this.socket = socket;
+        this.json = json;
     }
 
     public void run() {
@@ -42,7 +22,7 @@ class ClientHandler extends Thread {
 
             String request = in.readLine();
             if ("EXEMPLE_INITIAL".equals(request)) {
-                out.println("Exple initial reçu par le serveur. Voici mon absence de données.");
+                out.println(json);
             }
         } catch (IOException e) {
             e.printStackTrace();

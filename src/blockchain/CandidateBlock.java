@@ -9,10 +9,13 @@ import hasher.StringHasher;
 public class CandidateBlock {
 	private int index;
 	private long date;
+	private String author;
 
 	private StringHasher hasher;
 	private String prevHash;
 	private String hash;
+	private String sign;
+	
 	
 	private String data;
 	
@@ -24,6 +27,34 @@ public class CandidateBlock {
 		this.hasher = new StringHasher();
 	}
 	
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	public void setDate(long date) {
+		this.date = date;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public void setPrevHash(String prevHash) {
+		this.prevHash = prevHash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
+
+	public void setSign(String sign) {
+		this.sign = sign;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+
 	public void loadFromFile(File file) {
 		Scanner sc;
 		try {
@@ -50,7 +81,19 @@ public class CandidateBlock {
 					break;
 				}
 				case 3: {
+					this.author = line;
+					break;
+				}
+				case 4: {
+					this.date = Long.parseLong(line);
+					break;
+				}
+				case 5: {
 					this.hash = line;
+					break;
+				}
+				case 6: {
+					this.sign = line;
 					break;
 				}
 				default:
@@ -59,7 +102,12 @@ public class CandidateBlock {
 				
 				lineNumber++;
 			}
+			
+			assert lineNumber >= 6: "The file doesn't contain every informations";
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			System.out.println("CandidateBlock.loadFromFile: The creation time is badly formatted");
 			e.printStackTrace();
 		}
 	}
@@ -78,11 +126,11 @@ public class CandidateBlock {
 					)	
 				) && // Hash's value corresponds to the given hash
 				this.data != null &&
-				this.hash == this.hasher.calculateHash(this.index + this.prevHash + this.data);
+				this.hash == this.hasher.calculateHash(this.index + this.prevHash + author + date + sign + this.data);
 	}
 	
 	public Block createCorrespondingBlock() {
 		assert this.isValid() : "CandidateBlock.createcorrespondingBlock : Cannot create a block from an invalid candidate.";
-		return new Block(this.index, this.prevHash, this.hash, this.data);
+		return new Block(this.index, this.prevHash, this.author, this.sign, this.hash, this.data);
 	}
 }

@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class Blockchain {
-	private int id;
-	private ArrayList<Block> blocks;
+	protected int id;
+	protected ArrayList<Block> blocks;
 	
 	public Blockchain(int id) {
 		this.id = id;
@@ -17,9 +17,9 @@ public class Blockchain {
 		int size = this.blocks.size();
 		
 		if (size == 0) {
-			this.blocks.add(new Block(0, "0", data));
+			this.blocks.add(new Block(0, "0", "JT", "0", data));
 		} else {
-			this.blocks.add(new Block(size, this.blocks.getLast().getHash(), data));
+			this.blocks.add(new Block(size, this.blocks.getLast().getHash(), "JT", "0", data));
 		}
 	}
 	
